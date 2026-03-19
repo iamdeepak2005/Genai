@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+pydantic
+python-dotenv
+langchain
+langchain-core
+langchain-community
+langchain-openai
+langsmith
+openai
+psycopg2-binary
+sqlalchemy
+python-multipart
+pydub
+openai-whisper

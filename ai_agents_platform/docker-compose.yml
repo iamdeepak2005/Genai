@@ -1,0 +1,60 @@
+services:
+  admin_db:
+    image: postgres:15
+    container_name: admin_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "Deepak@2005"
+      POSTGRES_DB: admin_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - admin_db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  evaluation_db:
+    image: postgres:15
+    container_name: evaluation_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "Deepak@2005"
+      POSTGRES_DB: evaluation_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - eval_db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  admin_service:
+    build:
+      context: ./admin_service
+      dockerfile: Dockerfile
+    container_name: admin_service
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+    env_file:
+      - ./admin_service/.env
+    depends_on:
+      - admin_db
+    restart: unless-stopped
+
+  evaluation_service:
+    build:
+      context: ./evaluation_service
+      dockerfile: Dockerfile
+    container_name: evaluation_service
+    ports:
+      - "8001:8001"
+    environment:
+      - PYTHONUNBUFFERED=1
+    env_file:
+      - ./evaluation_service/.env
+    depends_on:
+      - evaluation_db
+    restart: unless-stopped
+
+volumes:
+  admin_db_data:
+  eval_db_data:
